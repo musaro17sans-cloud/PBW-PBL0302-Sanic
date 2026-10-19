@@ -62,6 +62,23 @@ def readcar():
 def updatecar():
     return render_template('updatecar.html', appType=appType)
 
+# KODE BARU: Fungsi untuk memproses data update
+@app.route('/updatecarsave', methods=['POST'])
+def updatecarsave():
+    fName = request.form['carName']
+    fBrand = request.form['carBrand']
+    fModel = request.form['carModel']
+    fPrice = request.form['carPrice']
+    
+    # Logika Peewee untuk melanjutkan Update
+    query = TBCars.update(
+        carbrand=fBrand,
+        carmodel=fModel,
+        carprice=fPrice
+    ).where(TBCars.carname == fName)
+    query.execute()
+    return redirect(url_for('readcar'))
+
 @app.route('/deletecar')
 def deletecar():
     return render_template('deletecar.html', appType=appType)
@@ -73,8 +90,13 @@ def deletecarsave():
     car_delete.execute()
     return redirect(url_for('readcar'))
 
-@app.route('/searchcar')
+@app.route('/searchcar', methods=['GET', 'POST'])
 def searchcar():
+    if request.method == 'POST':
+        keyword = request.form['keyword']
+        # Logika Peewee untuk mencari data
+        hasil_cari = TBCars.select().where(TBCars.carname.contains(keyword))
+        return render_template('searchcar.html', appType=appType, cars=hasil_cari)
     return render_template('searchcar.html', appType=appType)
 
 @app.route('/help')
@@ -89,5 +111,3 @@ if __name__ == '__main__':
         host='0.0.0.0',
         debug = True
         )
-
-

@@ -1,45 +1,118 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% include 'header.html' %}
+<body>
+  <!-- Header / Navigasi (Sesuai dengan header bawaan jika ada) -->
+  <div class="container mt-5">
+    <div class="row mb-4 text-center">
+      <div class="col-md-12">
+        <h2 class="font-weight-light">Car Management App</h2>
+        <p class="text-muted" style="font-size: 0.9em;">
+          <span style="color: #ff6b6b;">#PBW3B1PBL0302</span> - Framework {{ appType }} - Database SQLite
+        </p>
+      </div>
+    </div>
 
-    <title>{{appType}} | Car Project</title>
-
-    <meta name="description" content="Example Monolith">
-    <meta name="author" content="@hepidad">
-
-    <link href="../static/css/bootstrap.min.css" rel="stylesheet">
-
-  </head>
-  <body>
-
-  <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>Monolith | Car Project</h1>
-                <h3>Demo:
-                        <a href="{{url_for('createcar')}}">Create</a>
-                        /
-                        <a href="{{url_for('readcar')}}">Read</a>
-                        /
-                        <a href="{{url_for('updatecar')}}">Update</a>
-                        /
-                        <a href="{{url_for('deletecar')}}">Delete</a>
-                        /
-                        <a href="{{url_for('searchcar')}}">Search</a>
-                </h3> 
+    <!-- Area Tombol Tambah Baru & Form Pencarian -->
+    <div class="row mb-3 align-items-center">
+      <!-- Tombol Tambah Baru (Kiri) -->
+      <div class="col-md-6">
+        <a href="{{ url_for('createcar') }}" class="btn btn-primary shadow-sm" style="border-radius: 8px; font-weight: 500;">
+          Tambah baru
+        </a>
+      </div>
+      
+      <!-- Form Pencarian (Kanan) -->
+      <div class="col-md-6 text-right">
+        <form role="form" action="{{ url_for('searchcar') }}" method="POST" class="form-inline float-right" style="display: inline-block;">
+          <div class="input-group">
+            <!-- Kolom input pencarian -->
+            <input type="text" class="form-control bg-light" id="keyword" name="keyword" placeholder="Nama, Brand, atau Model" required style="border-radius: 8px 0 0 8px; min-width: 250px;">
+            <!-- Tombol Cari -->
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-outline-secondary" style="border-radius: 0 8px 8px 0; background-color: #f8f9fa;">
+                Cari
+              </button>
             </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Tabel Data Mobil -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-responsive shadow-sm" style="border-radius: 8px; overflow: hidden;">
+          <table class="table table-hover table-borderless mb-0" style="background-color: #f8f9fa;">
+            <!-- Kepala Tabel (Header) -->
+            <thead class="text-white text-center" style="background-color: #343a40;">
+              <tr>
+                <th scope="col" style="border-radius: 8px 0 0 0;">No.</th>
+                <th scope="col" class="text-left">Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Model</th>
+                <th scope="col">Price</th>
+                <th scope="col" style="border-radius: 0 8px 0 0;">Action</th>
+              </tr>
+            </thead>
+            <!-- Isi Tabel (Body) -->
+            <tbody class="text-center" style="background-color: white;">
+              {% if cars %}
+                <!-- Loop data mobil -->
+                {% for car in cars %}
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                  <td class="align-middle text-muted">{{ loop.index }}</td>
+                  <td class="align-middle text-left font-weight-bold">{{ car.carname }}</td>
+                  <td class="align-middle text-muted">{{ car.carbrand }}</td>
+                  <td class="align-middle text-muted">{{ car.carmodel }}</td>
+                  <td class="align-middle text-success font-weight-bold">${{ car.carprice }}</td>
+                  <td class="align-middle">
+                    <!-- Tombol Edit (Biru) -->
+                    <form action="{{ url_for('updatecar') }}" method="GET" style="display:inline;">
+                      <input type="hidden" name="id" value="{{ car.id }}">
+                      <button type="submit" class="btn btn-sm btn-outline-primary" style="border-radius: 4px;">Edit</button>
+                    </form>
+                    <!-- Tombol Delete (Merah) -->
+                    <form action="{{ url_for('deletecar') }}" method="GET" style="display:inline;">
+                      <input type="hidden" name="id" value="{{ car.id }}">
+                      <button type="submit" class="btn btn-sm btn-outline-danger" style="border-radius: 4px;">Delete</button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <!-- Jika data kosong / tidak ditemukan -->
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-4">
+                    {% if keyword %}
+                      Tidak ada mobil yang cocok dengan pencarian "{{ keyword }}".
+                    {% else %}
+                      Belum ada data mobil. Silakan tambah data baru.
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Search Car Data</h4>
-                <p>Silahkan diteruskan ... </p>
-            </div>
-            
+      </div>
+    </div>
+    
+    <!-- Bagian Paginasi (Prev - 1 - Next) - Statis untuk tampilan -->
+    <div class="row mt-3 mb-5">
+        <div class="col-md-12 text-center">
+            <nav aria-label="Page navigation">
+              <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" style="background-color: #f8f9fa; color: #6c757d; border-radius: 4px 0 0 4px;">Prev</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#" style="border-radius: 0;">1</a></li>
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" style="background-color: #f8f9fa; color: #6c757d; border-radius: 0 4px 4px 0;">Next</a>
+                </li>
+              </ul>
+            </nav>
         </div>
+    </div>
+
   </div>
-    <script src="../static/js/bootstrap.min.js"></script>
-  </body>
-</html>
+</body>
+{% include 'footer.html' %}

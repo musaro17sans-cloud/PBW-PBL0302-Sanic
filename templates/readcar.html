@@ -1,51 +1,74 @@
 {% include 'header.html' %}
-  <body>
-
-    <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>{{appType}} | Car Project</h1>
-                <h3>Demo:
-                        <a href="{{url_for('createcar')}}">Create</a>
-                        /
-                        <a href="{{url_for('readcar')}}">Read</a>
-                        /
-                        <a href="{{url_for('updatecar')}}">Update</a>
-                        /
-                        <a href="{{url_for('deletecar')}}">Delete</a>
-                        /
-                        <a href="{{url_for('searchcar')}}">Search</a>
-                </h3> 
-
-        </div>
+<body style="background-color: #f8f9fa;">
+  <div class="container mt-5 mb-5">
+    
+    <div class="row mb-4 text-center">
+      <div class="col-md-12">
+        <h2 class="font-weight-bold" style="color: #333;">Car Management App</h2>
+        <p style="font-size: 0.9em; color: #ff6b6b;">
+          #PBW3B1PBL0302 <span style="color: #6c757d;">- Framework {{ appType }} - Database SQLite</span>
+        </p>
+      </div>
     </div>
-    <br>
-    <div class="row">
-        <div class="col-md-12">
-            <h4>View Car Data</h4>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">ID</th>
-                  <th scope="col">Name</th>
-                  <th scope="col">Brand</th>
-                  <th scope="col">Model</th>
-                  <th scope="col">Price (USD)</th>
-                </tr>
-              </thead>
-              <tbody>
-              {% for data in rows %}  
-                <tr>
-                  <td>{{data.id}}</td>
-                  <td>{{data.carname}}</td>   
-                  <td>{{data.carbrand}}</td>
-                  <td>{{data.carmodel}}</td>
-                  <td>{{data.carprice}}</td>
-                </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-        </div>
+
+    <!-- Baris untuk Tombol Create (Kiri) dan Form Cari (Kanan) -->
+    <div class="row mb-3 align-items-center">
+      <div class="col-md-6 text-left">
+        <!-- Tombol Create di pojok kiri atas tabel -->
+        <a href="{{url_for('createcar')}}" class="btn btn-outline-primary shadow-sm" style="border-radius: 4px; padding: 5px 20px;">Create</a>
+      </div>
+      <div class="col-md-6">
+        <form role="form" action="{{ url_for('readcar') }}" method="POST" class="form-inline float-right">
+          <div class="input-group">
+            <input type="text" class="form-control" name="keyword" value="{{ keyword }}" placeholder="Nama, Brand, atau Model" style="border-radius: 4px 0 0 4px; min-width: 250px;">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-light" style="border: 1px solid #ced4da; border-radius: 0 4px 4px 0; background-color: #f8f9fa;">Cari</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-  </body>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div class="table-responsive shadow-sm" style="border-radius: 4px; background-color: white;">
+          <table class="table table-hover mb-0">
+            <thead style="background-color: #343a40; color: white;">
+              <tr>
+                <th class="text-center" style="padding: 15px;">ID</th>
+                <th class="text-left" style="padding: 15px;">Name</th>
+                <th class="text-left" style="padding: 15px;">Brand</th>
+                <th class="text-left" style="padding: 15px;">Model</th>
+                <th class="text-left" style="padding: 15px;">Price</th>
+                <th class="text-center" style="padding: 15px;">Action</th>
+              </tr>
+            </thead>
+            <tbody class="text-center">
+              {% if rows %}
+                {% for data in rows %}
+                <tr style="border-bottom: 1px solid #dee2e6;">
+                  <td class="align-middle text-muted">{{ data.id }}</td>
+                  <td class="align-middle text-left font-weight-bold" style="color: #333;">{{ data.carname }}</td>
+                  <td class="align-middle text-left text-muted">{{ data.carbrand }}</td>
+                  <td class="align-middle text-left text-muted">{{ data.carmodel }}</td>
+                  <td class="align-middle text-left text-success font-weight-bold">${{ data.carprice }}</td>
+                  <td class="align-middle">
+                    <a href="/updatecar?id={{ data.id }}" class="btn btn-sm btn-outline-primary" style="border-radius: 4px; padding: 2px 10px;">Edit</a>
+                    <a href="/deletecar?id={{ data.id }}" class="btn btn-sm btn-outline-danger" style="border-radius: 4px; padding: 2px 10px;">Delete</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="6" class="text-center py-4 text-muted">Data tidak ditemukan.</td>
+                </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
 {% include 'footer.html' %}

@@ -1,29 +1,47 @@
 {% include 'header.html' %}
-  <body>
-  <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>{{appType}} | Car Project</h1>
-                <h3>Demo:
-                        <a href="{{url_for('createcar')}}">Create</a>
-                        /
-                        <a href="{{url_for('readcar')}}">Read</a>
-                        /
-                        <a href="{{url_for('updatecar')}}">Update</a>
-                        /
-                        <a href="{{url_for('deletecar')}}">Delete</a>
-                        /
-                        <a href="{{url_for('searchcar')}}">Search</a>
-                </h3> 
-            </div>
+<body style="background-color: #f8f9fa;">
+  <div class="container mt-5 mb-5">
+    
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-10">
+        <div class="card shadow-sm" style="border-radius: 8px; border: none;">
+          <div class="card-header text-white" style="background-color: #f0ad4e; border-radius: 8px 8px 0 0;">
+            <h5 class="mb-0">Update Data Mobil</h5>
+          </div>
+          <div class="card-body bg-white">
+            <form role="form" action="{{url_for('updatecarsave')}}" method="POST">
+                <input type="hidden" name="id" value="{{ car.id }}">
+                
+                <div class="form-group">
+                    <label class="font-weight-bold text-muted">Nama Mobil</label>
+                    <input type="text" class="form-control" name="carName" value="{{ car.carname }}" required style="border-radius: 4px; background-color: #f8f9fa;">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold text-muted">Brand Baru</label>
+                    <input type="text" class="form-control" name='carBrand' value="{{ car.carbrand }}" required style="border-radius: 4px; background-color: #f8f9fa;">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold text-muted">Model Baru</label>
+                    <input type="text" class="form-control" name="carModel" value="{{ car.carmodel }}" required style="border-radius: 4px; background-color: #f8f9fa;">
+                </div>
+                <div class="form-group">
+                    <label class="font-weight-bold text-muted">Price Baru</label>
+                    <input type="text" class="form-control" name="carPrice" value="{{ car.carprice }}" required style="border-radius: 4px; background-color: #f8f9fa;">
+                </div>
+                
+                <!-- Layout Tombol: Kembali di Kiri Bawah, Update di Kanan Bawah -->
+                <div class="d-flex justify-content-between align-items-center mt-5">
+                  <a href="{{ url_for('readcar') }}" class="btn btn-outline-secondary px-4" style="border-radius: 4px; background-color: white;">
+                    &lt; Kembali
+                  </a>
+                  <button type="submit" class="btn btn-warning text-white px-5" style="border-radius: 4px; background-color: #f0ad4e; border-color: #eea236;">Update Data</button>
+                </div>
+            </form>
+          </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <h4>Update Car Data</h4>
-                <p>Silahkan diteruskan ... </p>
-            </div>
-            
-        </div>
+      </div>
+    </div>
+
   </div>
-  </body>
+</body>
 {% include 'footer.html' %}
