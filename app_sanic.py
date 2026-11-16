@@ -4,12 +4,13 @@ from sanic_ext import render
 from peewee import *
 
 app = Sanic("CarProject")
-app.static('/static', './static') 
+app.config.TEMPLATING_PATH_TO_TEMPLATES = "PBL0302"
+app.static('/static', './static')
 appType = 'Sanic Framework'
 database = SqliteDatabase('carsweb.db')
 
 class BaseModel(Model):
-     class Meta:
+    class Meta:
         database = database
 
 class TBCars(BaseModel):

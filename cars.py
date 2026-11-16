@@ -1,7 +1,7 @@
 from peewee import *
 from flask import Flask, render_template, request, url_for, redirect
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='PBL0301')
 
 global appType 
 appType = 'Monolith'
@@ -96,7 +96,7 @@ def searchcar():
         keyword = request.form['keyword']
         # Logika Peewee untuk mencari data
         hasil_cari = TBCars.select().where(TBCars.carname.contains(keyword))
-        return render_template('searchcar.html', appType=appType, cars=hasil_cari)
+        return render_template('searchcar.html', appType=appType, cars=hasil_cari, keyword=keyword)
     return render_template('searchcar.html', appType=appType)
 
 @app.route('/help')

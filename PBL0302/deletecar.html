@@ -6,14 +6,14 @@
       <div class="col-md-10">
         <div class="card shadow-sm" style="border-radius: 8px; border: none;">
           <div class="card-header text-white" style="background-color: #d9534f; border-radius: 8px 8px 0 0;">
-            <h5 class="mb-0">Delete Data Mobil</h5>
+            <h5 class="mb-0">Delete Car Data</h5>
           </div>
           <div class="card-body bg-white text-center">
             
-            <h4 class="mt-4 mb-4">Apakah Anda yakin ingin menghapus mobil <strong class="text-danger">"{{ car.carname }}"</strong>?</h4>
+            <h4 class="mt-4 mb-4">AAre you sure you want to delete the car? <strong class="text-danger">"{{ car.carname }}"</strong>?</h4>
             
             <div class="alert alert-warning text-left" style="border-radius: 4px; display: inline-block;">
-                <strong>Perhatian:</strong> Data yang dihapus tidak dapat dikembalikan lagi.
+                <strong>Attention:</strong> Deleted data cannot be recovered.
             </div>
             
             <form role="form" action="{{url_for('deletecarsave')}}" method="POST" class="mt-4">
